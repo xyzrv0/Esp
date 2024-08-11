@@ -1,0 +1,29 @@
+-- Highlight all players script
+local function highlightPlayer(character)
+    -- Check if Highlight already exists to avoid duplicates
+    if character:FindFirstChild("Highlight") then return end
+
+    -- Create a Highlight instance
+    local highlight = Instance.new("Highlight")
+    highlight.Parent = character
+    highlight.FillColor = Color3.fromRGB(255, 0, 0)  -- Red color for highlight
+    highlight.OutlineColor = Color3.fromRGB(255, 255, 255)  -- White outline color
+    highlight.Adornee = character
+end
+
+local function onPlayerAdded(player)
+    player.CharacterAdded:Connect(function(character)
+        highlightPlayer(character)
+    end)
+end
+
+-- Highlight all existing players
+for _, player in pairs(game.Players:GetPlayers()) do
+    if player.Character then
+        highlightPlayer(player.Character)
+    end
+    player.CharacterAdded:Connect(highlightPlayer)
+end
+
+-- Listen for new players joining the game
+game.Players.PlayerAdded:Connect(onPlayerAdded)
